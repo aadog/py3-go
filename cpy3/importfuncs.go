@@ -22,6 +22,23 @@ var (
 	pyRun_SimpleString        = libpython3.NewProc("PyRun_SimpleString")
 	py_SetPath                = libpython3.NewProc("Py_SetPath")
 	py_SetPythonHome          = libpython3.NewProc("Py_SetPythonHome")
+	_py_fopen_obj          = libpython3.NewProc("_Py_fopen_obj")
+
+
+
+	pyImport_AppendInittab          = libpython3.NewProc("PyImport_AppendInittab")
+	pyModule_Create2          = libpython3.NewProc("PyModule_Create2")
+
+
+
+
+
+	py_IncRef          = libpython3.NewProc("Py_IncRef")
+	py_DecRef          = libpython3.NewProc("Py_DecRef")
+
+	pyUnicode_FromString          = libpython3.NewProc("PyUnicode_FromString")
+	pyUnicode_GetLength          = libpython3.NewProc("PyUnicode_GetLength")
+	pyLong_FromLong          = libpython3.NewProc("PyLong_FromLong")
 )
 var kernel32dll = syscall.NewLazyDLL("kernel32.dll")
 var (
