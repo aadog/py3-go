@@ -1,7 +1,7 @@
-package py3_go
+package py3
 
 import (
-	"github.com/aadog/go-py3/cpy3"
+	"github.com/aadog/py3-go/cpy3"
 	"unsafe"
 )
 

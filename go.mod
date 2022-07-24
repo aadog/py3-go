@@ -1,4 +1,4 @@
-module github.com/aadog/go-py3
+module github.com/aadog/py3-go
 
 go 1.19
 

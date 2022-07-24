@@ -1,4 +1,4 @@
-package py3_go
+package py3
 
 import "github.com/aadog/py3-go/cpy3"
 

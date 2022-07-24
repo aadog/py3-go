@@ -1,4 +1,4 @@
-package py3_go
+package py3
 
 import "unsafe"
 
