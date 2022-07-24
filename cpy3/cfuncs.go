@@ -14,9 +14,9 @@ func uintptrToBytes(u uintptr) []byte {
 	return (*[sizeOfUintPtr]byte)(unsafe.Pointer(u))[:]
 }
 
-//func CStrToGoStr(ustr uintptr)string{
-//	return copyStr(ustr,G_strlen(ustr))
-//}
+func CStrToGoStr(ustr uintptr) string {
+	return copyStr(ustr, int(Lstrlen(ustr)))
+}
 
 func CBytesToGoBytes(ustr uintptr, n int) []byte {
 	return copyBytes(ustr, n)

@@ -76,38 +76,24 @@ func Py_SetPythonHome(home string) {
 	py_SetPythonHome.Call(StringToUTF16Ptr(home))
 }
 
-func Py_fopen_obj(path uintptr,mode string)uintptr{
-	r,_,_:=_py_fopen_obj.Call(path,GoStrToCStr(mode))
+func Py_fopen_obj(path uintptr, mode string) uintptr {
+	r, _, _ := _py_fopen_obj.Call(path, GoStrToCStr(mode))
 	return r
 }
 
-func PyUnicode_FromString(u string)uintptr{
-	r,_,_:=pyUnicode_FromString.Call(GoStrToCStr(u))
-	return r
-}
-func PyUnicode_GetLength(obj uintptr)uintptr{
-	r,_,_:=pyUnicode_GetLength.Call(obj)
-	return r
-}
-func PyLong_FromLong(l int64)uintptr{
-	r,_,_:=pyLong_FromLong.Call(uintptr(l))
+func PyLong_FromLong(l int64) uintptr {
+	r, _, _ := pyLong_FromLong.Call(uintptr(l))
 	return r
 }
 
-
-func Py_IncRef(obj uintptr){
+func Py_IncRef(obj uintptr) {
 	py_IncRef.Call(obj)
 }
-func Py_DecRef(obj uintptr){
+func Py_DecRef(obj uintptr) {
 	py_DecRef.Call(obj)
 }
 
-
-func PyImport_AppendInittab(name string,initfunc uintptr)int{
-	r,_,_:=pyImport_AppendInittab.Call(GoStrToCStr(name),initfunc)
+func PyImport_AppendInittab(name string, initfunc uintptr) int {
+	r, _, _ := pyImport_AppendInittab.Call(GoStrToCStr(name), initfunc)
 	return int(r)
-}
-func PyModule_Create2(PyModuleDef uintptr,apiver int)uintptr{
-	r,_,_:=pyModule_Create2.Call(PyModuleDef, uintptr(apiver))
-	return r
 }

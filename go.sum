@@ -1,2 +1,4 @@
 github.com/aadog/dylib v0.0.0-20210726041103-cf42039dadef h1:mGZOvpO7j6BEfP6n0XZR26yJI5JIEOdDob0DIRWCWzg=
 github.com/aadog/dylib v0.0.0-20210726041103-cf42039dadef/go.mod h1:s1Bk9R0HPteP3SdlPl2hDCeBa62CMsn01myH+/HQJYE=
+github.com/aadog/py3-go v0.0.0-20220722183119-ab76c6fd49f7 h1:iJLY1onGTvCk/91bhwRGOrFi6j1EDk8ITCm6jdaMFFg=
+github.com/aadog/py3-go v0.0.0-20220722183119-ab76c6fd49f7/go.mod h1:7dr+BHmt134y9ap4HlSrU92rqWCrNvuAm0THs0hyhuU=
