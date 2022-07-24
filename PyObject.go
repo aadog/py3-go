@@ -16,6 +16,16 @@ type PyObject struct {
 func (p *PyObject) String() string {
 	return p.Str()
 }
+func (p *PyObject) CallNoArgs() *PyObject {
+	return PyObjectFromInst(cpy3.PyObject_CallNoArgs(p.Instance()))
+}
+func (p *PyObject) CallObject(args *PyObject) *PyObject {
+	return PyObjectFromInst(cpy3.PyObject_CallObject(p.Instance(), args.instance))
+}
+func (p *PyObject) PyObject_Call(args *PyObject, kwargs *PyObject) *PyObject {
+	return PyObjectFromInst(cpy3.PyObject_Call(p.Instance(), args.instance, kwargs.instance))
+}
+
 func (p *PyObject) GetAttr(attr_name string) *PyObject {
 	name := PyUnicode_FromString(attr_name)
 	defer name.DecRef()
@@ -35,8 +45,23 @@ func (o *PyObject) IncRef() {
 		cpy3.Py_IncRef(o.instance)
 	}
 }
+func (p *PyObject) RefCount() int {
+	return int(cpy3.PyObjectFromPtr(p.instance).Ob_refcnt)
+}
 func (p *PyObject) AsObj() *PyObject {
 	return p
+}
+func (p *PyObject) AsInt() int {
+	return int(p.AsLong())
+}
+func (p *PyObject) AsDouble() float64 {
+	return cpy3.PyLong_AsDouble(p.instance)
+}
+func (p *PyObject) AsLong() int {
+	return cpy3.PyLong_AsLong(p.instance)
+}
+func (p *PyObject) AsLongLong() int64 {
+	return cpy3.PyLong_AsLongLong(p.instance)
 }
 
 // PyObjectFromInst

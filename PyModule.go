@@ -8,17 +8,20 @@ import (
 	"unsafe"
 )
 
+var ModuleMethodsDef = sync.Map{}
+var ModuleDefMap = sync.Map{}
 var PyMethodMap = sync.Map{}
 var pyModuleInitMap = sync.Map{}
+
 var PyMethodCallBack = syscall.NewCallback(func(self uintptr, args uintptr) uintptr {
 	pyArgs := PyTupleFromInst(args)
 	pyArgsLen := pyArgs.Size()
 	if pyArgsLen < 1 {
 		return Py_RETURN_NONE().instance
 	}
-	code := pyArgs.GetItem(0)
+	code := pyArgs.GetItem(0).Str()
 
-	ifn, ok := PyMethodMap.Load(code.Str())
+	ifn, ok := PyMethodMap.Load(code)
 	if ok == false {
 		return Py_RETURN_NONE().Instance()
 	}
@@ -102,20 +105,31 @@ func CreateModule(def *PyModuleDef) *PyObject {
 	methods := make([]cpy3.PyMethodDef, 0)
 	for _, method := range def.MethodDefs {
 		methodName := method.Name
-		methods = append(methods, cpy3.PyMethodDef{
-			Ml_name:  cpy3.GoStrToCStr(method.Name),
-			Ml_meth:  NewMethodCallBack(moduleName, methodName, method.Method),
-			Ml_flags: method.flags,
-			Ml_doc:   cpy3.GoStrToCStr(method.Doc),
-		})
+		NewMethodCallBack(moduleName,methodName,method.Method)
+		//methodDef := cpy3.PyMethodDef{
+		//	Ml_name:  cpy3.GoStrToCStr(method.Name),
+		//	Ml_meth:  NewMethodCallBack(moduleName, methodName, method.Method),
+		//	Ml_flags: method.flags,
+		//	Ml_doc:   cpy3.GoStrToCStr(method.Doc),
+		//}
+		//methods = append(methods, methodDef)
 	}
-	methods = append(methods, cpy3.PyMethodDef{
+	methodCallDef := cpy3.PyMethodDef{
+		Ml_name:  cpy3.GoStrToCStr("Call"),
+		Ml_meth:  PyMethodCallBack,
+		Ml_flags: 1,
+		Ml_doc:   cpy3.GoStrToCStr("跳转程序"),
+	}
+	methods = append(methods, methodCallDef)
+	moduleNullMethodDef := cpy3.PyMethodDef{
 		Ml_name:  0,
 		Ml_meth:  0,
 		Ml_flags: 0,
 		Ml_doc:   0,
-	})
+	}
+	methods = append(methods, moduleNullMethodDef)
 
+	ModuleMethodsDef.Store(fmt.Sprintf("%s", moduleName), methods)
 	moduleDef := cpy3.PyModuleDef{
 		M_base: cpy3.PyModuleDef_Base{
 			Ob_base: cpy3.PyObject_HEAD_INIT(0),
@@ -129,6 +143,10 @@ func CreateModule(def *PyModuleDef) *PyObject {
 		M_clear:    0,
 		M_free:     0,
 	}
-	ptr := cpy3.PyModule_Create2(uintptr(unsafe.Pointer(&moduleDef)), 1013)
-	return PyObjectFromInst(ptr)
+	ModuleDefMap.Store(moduleName, def)
+
+	pyObj := PyObjectFromInst(cpy3.PyModule_Create2(uintptr(unsafe.Pointer(&moduleDef)), 1013))
+	//不知道为啥非要IncRef一次才不会崩溃
+	pyObj.IncRef()
+	return pyObj
 }

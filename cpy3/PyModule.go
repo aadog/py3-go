@@ -1,5 +1,7 @@
 package cpy3
 
+import "unsafe"
+
 type PyMethodDef struct {
 	Ml_name  uintptr
 	Ml_meth  uintptr
@@ -12,6 +14,7 @@ type PyObject struct {
 	Ob_refcnt uintptr
 	Ob_type   uintptr
 }
+
 type PyModuleDef_Base struct {
 	Ob_base PyObject
 	M_init  uintptr
@@ -28,6 +31,10 @@ type PyModuleDef struct {
 	M_traverse uintptr
 	M_clear    uintptr
 	M_free     uintptr
+}
+
+func PyObjectFromPtr(ptr uintptr) *PyObject {
+	return (*PyObject)(unsafe.Pointer(ptr))
 }
 
 func PyObject_HEAD_INIT(ob_type uintptr) PyObject {

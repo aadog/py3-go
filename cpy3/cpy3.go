@@ -81,11 +81,6 @@ func Py_fopen_obj(path uintptr, mode string) uintptr {
 	return r
 }
 
-func PyLong_FromLong(l int64) uintptr {
-	r, _, _ := pyLong_FromLong.Call(uintptr(l))
-	return r
-}
-
 func Py_IncRef(obj uintptr) {
 	py_IncRef.Call(obj)
 }

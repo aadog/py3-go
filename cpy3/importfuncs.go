@@ -37,10 +37,20 @@ var (
 	pyUnicode_DecodeFSDefault = libpython3.NewProc("PyUnicode_DecodeFSDefault")
 	pyUnicode_FromString      = libpython3.NewProc("PyUnicode_FromString")
 	pyUnicode_GetLength       = libpython3.NewProc("PyUnicode_GetLength")
-	pyLong_FromLong           = libpython3.NewProc("PyLong_FromLong")
 
-	pyObject_Str     = libpython3.NewProc("PyObject_Str")
-	pyObject_GetAttr = libpython3.NewProc("PyObject_GetAttr")
+	pyObject_Str        = libpython3.NewProc("PyObject_Str")
+	pyObject_GetAttr    = libpython3.NewProc("PyObject_GetAttr")
+	pyObject_Call       = libpython3.NewProc("PyObject_Call")
+	pyObject_CallObject = libpython3.NewProc("PyObject_CallObject")
+	pyObject_CallNoArgs = libpython3.NewProc("PyObject_CallNoArgs")
+
+	pyLong_AsDouble     = libpython3.NewProc("PyLong_AsDouble")
+	pyLong_AsLong       = libpython3.NewProc("PyLong_AsLong")
+	pyLong_AsLongLong   = libpython3.NewProc("PyLong_AsLongLong")
+	pyLong_FromDouble   = libpython3.NewProc("PyLong_FromDouble")
+	pyLong_FromLong     = libpython3.NewProc("PyLong_FromLong")
+	pyLong_FromLongLong = libpython3.NewProc("PyLong_FromLongLong")
+	pyLong_FromString   = libpython3.NewProc("PyLong_FromString")
 
 	pyModule_Create2           = libpython3.NewProc("PyModule_Create2")
 	pyImport_Import            = libpython3.NewProc("PyImport_Import")

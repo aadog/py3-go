@@ -8,10 +8,11 @@ type PyMethodDef struct {
 }
 
 func NewMethodDef(name string, meth func(self *PyObject, args *PyObject) *PyObject, doc string, flags int) *PyMethodDef {
-	return &PyMethodDef{
+	def := &PyMethodDef{
 		Name:   name,
 		Method: meth,
 		flags:  flags,
 		Doc:    doc,
 	}
+	return def
 }

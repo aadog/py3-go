@@ -7,7 +7,8 @@ type PyModuleDef struct {
 }
 
 func NewModuleDef(name string, doc string) *PyModuleDef {
-	return &PyModuleDef{Name: name, Doc: doc}
+	def := &PyModuleDef{Name: name, Doc: doc}
+	return def
 }
 func (m *PyModuleDef) AddMethodDef(methodDef *PyMethodDef) {
 	m.MethodDefs = append(m.MethodDefs, methodDef)
