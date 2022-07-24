@@ -2,35 +2,29 @@ package py3
 
 import (
 	"fmt"
+	"github.com/aadog/py3-go/cpy3"
+	"os"
 	"testing"
 )
-
-func TestCreateModule(t *testing.T) {
-
-	//	moduleName := "test"
-	//	Import_AppendInittab(moduleName, func() *PyObject {
-	//		def := NewModuleDef(moduleName, "")
-	//		def.AddMethodDef(NewMethodDef("aa", func() {
-	//			fmt.Println("aa")
-	//		}, "", 1))
-	//		return CreateModule(def)
-	//	})
-	//	cpy3.Py_Initialize()
-	//	cpy3.PyRun_SimpleString(`
-	//import test
-	//`)
-}
 
 type K struct {
 	Doc string
 }
 
 func (v *K) Test(self *PyObject, args *PyObject) *PyObject {
+	fmt.Println("test")
 	return nil
 }
 func TestRegModule(t *testing.T) {
-	PyImport_AppendInittab("test", func() *PyObject {
-		return RegPyModule("test", &K{})
+	PyImport_AppendInittab("_test", func() *PyObject {
+		return RegPyModule("_test", &K{})
 	})
-	fmt.Println()
+	cpy3.Py_SetProgramName(os.Args[0])
+	cpy3.Py_SetPythonHome("./")
+	cpy3.Py_Initialize()
+	cpy3.PyRun_SimpleString(`
+print("aaa")
+#import _test
+#print(_test.Call('Test'))
+`)
 }
