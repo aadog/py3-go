@@ -62,7 +62,7 @@ var (
 	pyModule_AddObject         = libpython3.NewProc("PyModule_AddObject")
 	pyModule_AddObjectRef      = libpython3.NewProc("PyModule_AddObjectRef")
 
-	pyDict_SetItemString = libpython3.NewProc("pyDict_SetItemString")
+	pyDict_SetItemString = libpython3.NewProc("PyDict_SetItemString")
 	pyDict_New           = libpython3.NewProc("PyDict_New")
 	pyDict_Size          = libpython3.NewProc("PyDict_Size")
 	pyDict_Clear         = libpython3.NewProc("PyDict_Clear")
