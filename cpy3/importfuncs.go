@@ -62,6 +62,16 @@ var (
 	pyModule_AddObject         = libpython3.NewProc("PyModule_AddObject")
 	pyModule_AddObjectRef      = libpython3.NewProc("PyModule_AddObjectRef")
 
+	pyDict_SetItemString = libpython3.NewProc("pyDict_SetItemString")
+	pyDict_New           = libpython3.NewProc("PyDict_New")
+	pyDict_Size          = libpython3.NewProc("PyDict_Size")
+	pyDict_Clear         = libpython3.NewProc("PyDict_Clear")
+	pyDict_GetItem       = libpython3.NewProc("PyDict_GetItem")
+	pyDict_Keys          = libpython3.NewProc("PyDict_Keys")
+	pyDict_GetItemString = libpython3.NewProc("PyDict_GetItemString")
+	pyDict_DelItem       = libpython3.NewProc("PyDict_DelItem")
+	pyDict_DelItemString = libpython3.NewProc("PyDict_DelItemString")
+
 	pyEval_GetBuiltins = libpython3.NewProc("PyEval_GetBuiltins")
 	pyEval_GetLocals   = libpython3.NewProc("PyEval_GetLocals")
 	pyEval_GetGlobals  = libpython3.NewProc("PyEval_GetGlobals")

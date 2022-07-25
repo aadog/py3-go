@@ -1,9 +1,41 @@
 package py3
 
-import "unsafe"
+import (
+	"github.com/aadog/py3-go/cpy3"
+	"unsafe"
+)
 
 type PyDict struct {
 	PyObject
+}
+
+func (p *PyDict) DelItemString(key string) int {
+	return cpy3.PyDict_DelItemString(p.instance, key)
+}
+
+func (p *PyDict) DelItem(key *PyObject) int {
+	return cpy3.PyDict_DelItem(p.instance, key.instance)
+}
+
+func (p *PyDict) GetItemString(key string) *PyObject {
+	return PyObjectFromInst(cpy3.PyDict_GetItemString(p.instance, key))
+}
+
+func (p *PyDict) Keys(key *PyObject) *PyObject {
+	return PyObjectFromInst(cpy3.PyDict_Keys(p.instance))
+}
+func (p *PyDict) GetItem(key *PyObject) *PyObject {
+	return PyObjectFromInst(cpy3.PyDict_GetItem(p.instance, key.instance))
+}
+
+func (p *PyDict) SetItemString(key string, val *PyObject) int {
+	return cpy3.PyDict_SetItemString(p.instance, key, val.instance)
+}
+func (p *PyDict) Size() int64 {
+	return cpy3.PyDict_Size(p.instance)
+}
+func (p *PyDict) Clear() {
+	cpy3.PyDict_Clear(p.instance)
 }
 
 // PyDictFromInst
@@ -15,4 +47,8 @@ func PyDictFromInst(inst uintptr) *PyDict {
 	dl.instance = inst
 	dl.ptr = unsafe.Pointer(dl.instance)
 	return dl
+}
+
+func NewPyDict() *PyDict {
+	return PyDictFromInst(cpy3.PyDict_New())
 }

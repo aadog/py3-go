@@ -88,6 +88,13 @@ func PyModuleFromInst(inst uintptr) *PyModule {
 	return dl
 }
 
+// Create a new object from an existing object instance pointer.
+func PyModuleFromObj(obj *PyObject) *PyModule {
+	dl := new(PyModule)
+	dl.PyObject=*obj
+	return dl
+}
+
 func NewModuleInitFuncCallBack(moduleName string, fn func() *PyObject) uintptr {
 	c := syscall.NewCallback(func() uintptr {
 		return fn().Instance()
