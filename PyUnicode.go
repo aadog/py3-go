@@ -20,7 +20,7 @@ func (p *PyObject) AsUTF8() string {
 func PyUnicode_DecodeFSDefault(s string) *PyUnicode {
 	return PyUnicodeFromInst(cpy3.PyUnicode_DecodeFSDefault(s))
 }
-func PyUnicode_FromString(s string) *PyUnicode {
+func NewPyUnicode(s string) *PyUnicode {
 	return PyUnicodeFromInst(cpy3.PyUnicode_FromString(s))
 }
 

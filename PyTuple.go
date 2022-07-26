@@ -18,6 +18,9 @@ func (p *PyTuple) Check() int64 {
 func (p *PyTuple) GetItem(pos int64) *PyObject {
 	return PyObjectFromInst(cpy3.PyTuple_GetItem(p.instance, pos))
 }
+func (p *PyTuple) SetItem(pos int64, o *PyObject) *PyObject {
+	return PyObjectFromInst(cpy3.PyTuple_SetItem(p.instance, pos, o.instance))
+}
 func (p *PyTuple) GetSlice(low int64, high int64) *PyObject {
 	return PyObjectFromInst(cpy3.PyTuple_GetSlice(p.instance, low, high))
 }
@@ -36,4 +39,8 @@ func PyTupleFromObj(obj *PyObject) *PyTuple {
 	dl := new(PyTuple)
 	dl.PyObject = *obj
 	return dl
+}
+
+func NewPyTuple(l int64) *PyTuple {
+	return PyTupleFromInst(cpy3.PyTuple_New(l))
 }

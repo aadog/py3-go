@@ -21,7 +21,7 @@ func (p *PyDict) GetItemString(key string) *PyObject {
 	return PyObjectFromInst(cpy3.PyDict_GetItemString(p.instance, key))
 }
 
-func (p *PyDict) Keys(key *PyObject) *PyObject {
+func (p *PyDict) Keys() *PyObject {
 	return PyObjectFromInst(cpy3.PyDict_Keys(p.instance))
 }
 func (p *PyDict) GetItem(key *PyObject) *PyObject {
@@ -31,6 +31,10 @@ func (p *PyDict) GetItem(key *PyObject) *PyObject {
 func (p *PyDict) SetItemString(key string, val *PyObject) int {
 	return cpy3.PyDict_SetItemString(p.instance, key, val.instance)
 }
+func (p *PyDict) SetItem(key *PyObject, val *PyObject) int {
+	return cpy3.PyDict_SetItem(p.instance, key.instance, val.instance)
+}
+
 func (p *PyDict) Size() int64 {
 	return cpy3.PyDict_Size(p.instance)
 }
@@ -46,6 +50,11 @@ func PyDictFromInst(inst uintptr) *PyDict {
 	dl := new(PyDict)
 	dl.instance = inst
 	dl.ptr = unsafe.Pointer(dl.instance)
+	return dl
+}
+func PyDictFromObj(obj *PyObject) *PyDict {
+	dl := new(PyDict)
+	dl.PyObject = *obj
 	return dl
 }
 

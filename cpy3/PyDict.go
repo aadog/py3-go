@@ -1,5 +1,10 @@
 package cpy3
 
+func PyDict_SetItem(obj uintptr, key uintptr, val uintptr) int {
+	r, _, _ := pyDict_SetItem.Call(obj, key, val)
+	return int(r)
+}
+
 func PyDict_SetItemString(obj uintptr, key string, val uintptr) int {
 	r, _, _ := pyDict_SetItemString.Call(obj, GoStrToCStr(key), val)
 	return int(r)

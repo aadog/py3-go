@@ -17,7 +17,7 @@ func (v *K) Test(self *PyObject, args *PyObject) *PyObject {
 }
 func TestRegModule(t *testing.T) {
 	PyImport_AppendInittab("_test", func() *PyObject {
-		return RegPyModule("_test", &K{})
+		return CreateModule("_test", "aa").AsObj()
 	})
 	cpy3.Py_SetProgramName(os.Args[0])
 	cpy3.Py_SetPythonHome("./")

@@ -7,7 +7,8 @@ func PyImport_Import(name string) *PyModule {
 	defer pName.DecRef()
 	return PyModuleFromInst(cpy3.PyImport_Import(pName.instance))
 }
+
 func PyImport_AppendInittab(name string, initFunc func() *PyObject) int {
-	PyMethodMap.Store(name, initFunc)
-	return cpy3.PyImport_AppendInittab(name, NewModuleInitFuncCallBack(name, initFunc))
+	r := cpy3.PyImport_AppendInittab(name, NewModuleInitFuncCallBack(name, initFunc))
+	return r
 }

@@ -1,5 +1,28 @@
 package cpy3
 
+func PyObject_GetAttrString(obj uintptr, attr_name string) uintptr {
+	r, _, _ := pyObject_GetAttrString.Call(obj, GoStrToCStr(attr_name))
+	return r
+}
+func PyObject_HasAttrString(obj uintptr, attr_name string) int {
+	r, _, _ := pyObject_HasAttrString.Call(obj, GoStrToCStr(attr_name))
+	return int(r)
+}
+func PyObject_SetAttrString(obj uintptr, attr_name string, v uintptr) int {
+	r, _, _ := pyObject_SetAttrString.Call(obj, GoStrToCStr(attr_name), v)
+	return int(r)
+}
+
+func PyObject_DelAttrString(obj uintptr, attr_name string) int {
+	r, _, _ := pyObject_DelAttrString.Call(obj, GoStrToCStr(attr_name))
+	return int(r)
+}
+
+func PyObject_Type(obj uintptr) uintptr {
+	r, _, _ := pyObject_Type.Call(obj)
+	return r
+}
+
 func PyObject_Str(obj uintptr) uintptr {
 	r, _, _ := pyObject_Str.Call(obj)
 	return r

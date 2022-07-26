@@ -38,11 +38,16 @@ var (
 	pyUnicode_FromString      = libpython3.NewProc("PyUnicode_FromString")
 	pyUnicode_GetLength       = libpython3.NewProc("PyUnicode_GetLength")
 
-	pyObject_Str        = libpython3.NewProc("PyObject_Str")
-	pyObject_GetAttr    = libpython3.NewProc("PyObject_GetAttr")
-	pyObject_Call       = libpython3.NewProc("PyObject_Call")
-	pyObject_CallObject = libpython3.NewProc("PyObject_CallObject")
-	pyObject_CallNoArgs = libpython3.NewProc("PyObject_CallNoArgs")
+	pyObject_Str           = libpython3.NewProc("PyObject_Str")
+	pyObject_GetAttr       = libpython3.NewProc("PyObject_GetAttr")
+	pyObject_Call          = libpython3.NewProc("PyObject_Call")
+	pyObject_CallObject    = libpython3.NewProc("PyObject_CallObject")
+	pyObject_CallNoArgs    = libpython3.NewProc("PyObject_CallNoArgs")
+	pyObject_Type          = libpython3.NewProc("PyObject_Type")
+	pyObject_HasAttrString = libpython3.NewProc("PyObject_HasAttrString")
+	pyObject_GetAttrString = libpython3.NewProc("PyObject_GetAttrString")
+	pyObject_SetAttrString = libpython3.NewProc("PyObject_SetAttrString")
+	pyObject_DelAttrString = libpython3.NewProc("PyObject_DelAttrString")
 
 	pyLong_AsDouble     = libpython3.NewProc("PyLong_AsDouble")
 	pyLong_AsLong       = libpython3.NewProc("PyLong_AsLong")
@@ -62,6 +67,7 @@ var (
 	pyModule_AddObject         = libpython3.NewProc("PyModule_AddObject")
 	pyModule_AddObjectRef      = libpython3.NewProc("PyModule_AddObjectRef")
 
+	pyDict_SetItem       = libpython3.NewProc("PyDict_SetItem")
 	pyDict_SetItemString = libpython3.NewProc("PyDict_SetItemString")
 	pyDict_New           = libpython3.NewProc("PyDict_New")
 	pyDict_Size          = libpython3.NewProc("PyDict_Size")
@@ -81,8 +87,36 @@ var (
 
 	pyTuple_Size     = libpython3.NewProc("PyTuple_Size")
 	pyTuple_GetItem  = libpython3.NewProc("PyTuple_GetItem")
+	pyTuple_SetItem  = libpython3.NewProc("PyTuple_SetItem")
 	pyTuple_GetSlice = libpython3.NewProc("PyTuple_GetSlice")
 	pyTuple_Check    = libpython3.NewProc("PyTuple_Check")
+	pyTuple_New      = libpython3.NewProc("PyTuple_New")
+
+	pyBytes_FromString = libpython3.NewProc("PyBytes_FromString")
+
+	pyObject_CallFunctionObjArgs = libpython3.NewProc("PyObject_CallFunctionObjArgs")
+
+	pyType_Type      = libpython3.NewProc("PyType_Type")
+	pyType_Name      = libpython3.NewProc("_PyType_Name")
+	pyType_GetModule = libpython3.NewProc("PyType_GetModule")
+
+	pyList_New      = libpython3.NewProc("PyList_New")
+	pyList_SetItem  = libpython3.NewProc("PyList_SetItem")
+	pyList_GetItem  = libpython3.NewProc("PyList_GetItem")
+	pyList_GetSlice = libpython3.NewProc("PyList_GetSlice")
+	pyList_Size     = libpython3.NewProc("PyList_Size")
+	pyList_Insert   = libpython3.NewProc("PyList_Insert")
+	pyList_Append   = libpython3.NewProc("PyList_Append")
+
+	pyBool_FromLong = libpython3.NewProc("PyBool_FromLong")
+
+	pyExc_Exception  = libpython3.NewProc("PyExc_Exception")
+	pyExc_ValueError = libpython3.NewProc("PyExc_ValueError")
+	pyErr_SetString  = libpython3.NewProc("PyErr_SetString")
+
+	pyInstanceMethod_New = libpython3.NewProc("PyInstanceMethod_New")
+
+	pyCFunction_New = libpython3.NewProc("PyCFunction_New")
 )
 
 var kernel32dll = syscall.NewLazyDLL("kernel32.dll")
