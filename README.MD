@@ -1,11 +1,24 @@
 
-### go python bind
+### go python3 bind
 
-#### cgo-less 
+
+### support list
+- `cogo-less,It does not need CGO support, so the compilation speed is very fast`
+- `python3 all plugin,include Native module`
+- `Automatic type conversion Go to PyObject`
+- `Automatic type conversion PyObject to Go`
+- `import Any Python package`
+- `C function is registered to python, painless interaction`
+
+### cgo-less 
+
+### install
 
 ```
 go get github.com/aadog/py3-go
 ```
+
+
 
 
 ### test
