@@ -9,6 +9,7 @@ var SystemModuleMap = sync.Map{}
 
 func Initialize() {
 	cpy3.Py_Initialize()
+	_UserException=PyErr_NewException("gofunction.error",PyNil,PyNil)
 }
 func AddModuleToSystemMap(m *PyModule) {
 	SystemModuleMap.Store(m.GetName(), m)
