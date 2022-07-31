@@ -9,6 +9,9 @@ func PyImport_Import(name string) *PyModule {
 }
 
 func PyImport_AppendInittab(name string, initFunc func() *PyObject) int {
-	r := cpy3.PyImport_AppendInittab(name, NewModuleInitFuncCallBack(name, initFunc))
+	r := cpy3.PyImport_AppendInittab(name, NewModuleInitFuncCallBack(name, func() *PyObject {
+		obj := initFunc()
+		return obj
+	}))
 	return r
 }

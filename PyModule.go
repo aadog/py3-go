@@ -14,12 +14,15 @@ const (
 	PYTHON_API_STRING  = "1013"
 )
 
-var ModuleDefMap = sync.Map{}
-var PyMethodMap = sync.Map{}
 var pyModuleInitMap = sync.Map{}
 
+type PyModuleGoObj struct {
+	moduleDef *cpy3.PyModuleDef
+	CallMap   sync.Map
+}
 type PyModule struct {
 	PyObject
+	GoObj *PyModuleGoObj
 }
 
 func (p *PyModule) GetName() string {
@@ -30,33 +33,12 @@ func (p *PyModule) GetDict() *PyDict {
 }
 
 func (p *PyModule) AddFunction(name string, fn interface{}) {
-	PyMethodMap.Store(fmt.Sprintf("%s.%s", p.GetName(), name), fn)
+	p.GoObj.CallMap.Store(name, fn)
 }
 func (p *PyModule) AddClass(class *PyClass) {
 	className := class.GetAttrString("__className__")
 	p.AddObject(className.AsUTF8(), class.AsObj())
 }
-
-//	func (p *PyModule) AddFunctions(functionsDef []PyMethodDef) int {
-//		methods := make([]cpy3.PyMethodDef, 0)
-//		moduleName := p.GetName()
-//		for _, method := range functionsDef {
-//			methodName := method.Name
-//			methods = append(methods, cpy3.PyMethodDef{
-//				Ml_name:  cpy3.GoStrToCStr(method.Name),
-//				Ml_meth:  NewMethodCallBack(moduleName, methodName, method.Method),
-//				Ml_flags: method.flags,
-//				Ml_doc:   cpy3.GoStrToCStr(method.Doc),
-//			})
-//		}
-//		methods = append(methods, cpy3.PyMethodDef{
-//			Ml_name:  0,
-//			Ml_meth:  0,
-//			Ml_flags: 0,
-//			Ml_doc:   0,
-//		})
-//		return cpy3.PyModule_AddFunctions(p.instance, uintptr(unsafe.Pointer(&methods[0])))
-//	}
 func (p *PyModule) AddIntConstant(name string, value int64) int {
 	return cpy3.PyModule_AddIntConstant(p.instance, name, value)
 }
@@ -78,28 +60,36 @@ func PyModuleFromInst(inst uintptr) *PyModule {
 	dl := new(PyModule)
 	dl.instance = inst
 	dl.ptr = unsafe.Pointer(dl.instance)
+
+	name := dl.GetName()
+	smmodule, _ := SystemModuleMap.Load(name)
+	dl.GoObj = smmodule.(*PyModule).GoObj
 	return dl
 }
 func PyModuleFromObj(obj *PyObject) *PyModule {
 	dl := new(PyModule)
 	dl.PyObject = *obj
+
+	name := dl.GetName()
+	smmodule, _ := SystemModuleMap.Load(name)
+	dl.GoObj = smmodule.(*PyModule).GoObj
 	return dl
 }
 
-var MethodCallDefs = make([]cpy3.PyMethodDef, 0)
+var pyModuleMethodCallDefs = make([]cpy3.PyMethodDef, 0)
 
 func PyTypeToGoType(p *PyObject) any {
 
 	return 0
 }
-func PyMethodForward(self *PyObject, args *PyTuple, method interface{}) *PyObject {
+func PyMethodForward(self *PyModule, args *PyTuple, method interface{}) *PyObject {
 	methodType := reflect.TypeOf(method)
 	methodValue := reflect.ValueOf(method)
 	if methodType.Kind() != reflect.Func {
 		return Py_RETURN_NONE().AsObj()
 	}
 	if int64(methodType.NumIn()) != args.Size() {
-		fmt.Println("参数不匹配")
+		PyErr_SetString(UserException(), fmt.Sprintf("The number of parameters does not match,%d parameter is required, and you have entered %d", methodType.NumIn(), args.Size()))
 		return Py_RETURN_NONE().AsObj()
 	}
 
@@ -126,8 +116,8 @@ func PyMethodForward(self *PyObject, args *PyTuple, method interface{}) *PyObjec
 	return Py_RETURN_NONE().AsObj()
 }
 
-var PyMethodForwardCallBack = syscall.NewCallback(func(self uintptr, args uintptr) uintptr {
-	pySelf := PyObjectFromInst(self)
+var PyModuleMethodForwardCallBack = syscall.NewCallback(func(self uintptr, args uintptr) uintptr {
+
 	pyArgs := PyTupleFromInst(args)
 	pyArgsLen := pyArgs.Size()
 	if pyArgsLen < 1 {
@@ -135,51 +125,58 @@ var PyMethodForwardCallBack = syscall.NewCallback(func(self uintptr, args uintpt
 	}
 	ForwardCode := pyArgs.GetItem(0).Str()
 
-	ifn, ok := PyMethodMap.Load(ForwardCode)
+	pyModule := PyModuleFromInst(self)
+	moduleName := pyModule.GetName()
+	ifn, ok := pyModule.GoObj.CallMap.Load(ForwardCode)
 	if ok == false {
+		PyErr_SetString(UserException(), fmt.Sprintf("%s not find method %s ", moduleName, ForwardCode))
 		return Py_RETURN_NONE().Instance()
 	}
 	//处理参数
 	newArgs := PyTupleFromObj(pyArgs.GetSlice(1, pyArgsLen))
 	defer newArgs.DecRef()
 
-	return PyMethodForward(pySelf, newArgs, ifn).Instance()
+	return PyMethodForward(pyModule, newArgs, ifn).Instance()
 })
 
 func init() {
 	methodCallDef := cpy3.PyMethodDef{
 		Ml_name:  cpy3.GoStrToCStr("Call"),
-		Ml_meth:  PyMethodForwardCallBack,
+		Ml_meth:  PyModuleMethodForwardCallBack,
 		Ml_flags: 1,
 		Ml_doc:   cpy3.GoStrToCStr("module call forward"),
 	}
-	MethodCallDefs = append(MethodCallDefs, methodCallDef)
+	pyModuleMethodCallDefs = append(pyModuleMethodCallDefs, methodCallDef)
 	moduleNullMethodDef := cpy3.PyMethodDef{
 		Ml_name:  0,
 		Ml_meth:  0,
 		Ml_flags: 0,
 		Ml_doc:   0,
 	}
-	MethodCallDefs = append(MethodCallDefs, moduleNullMethodDef)
+	pyModuleMethodCallDefs = append(pyModuleMethodCallDefs, moduleNullMethodDef)
 }
 
 func CreateModule(name string, doc string) *PyModule {
-	moduleDef := cpy3.PyModuleDef{
+	module := &PyModule{}
+	module.GoObj = new(PyModuleGoObj)
+	module.GoObj.moduleDef = &cpy3.PyModuleDef{
 		M_base: cpy3.PyModuleDef_Base{
 			Ob_base: cpy3.PyObject_HEAD_INIT(0),
 		},
 		M_name:     cpy3.GoStrToCStr(name),
 		M_doc:      cpy3.GoStrToCStr(doc),
 		M_size:     -1,
-		M_methods:  uintptr(unsafe.Pointer(&MethodCallDefs[0])),
+		M_methods:  uintptr(unsafe.Pointer(&pyModuleMethodCallDefs[0])),
 		M_slots:    0,
 		M_traverse: 0,
 		M_clear:    0,
 		M_free:     0,
 	}
-	ModuleDefMap.Store(name, &moduleDef)
-	m := PyModuleFromInst(cpy3.PyModule_Create2(uintptr(unsafe.Pointer(&moduleDef)), PYTHON_API_VERSION))
-	return m
+	ptr := cpy3.PyModule_Create2(uintptr(unsafe.Pointer(module.GoObj.moduleDef)), PYTHON_API_VERSION)
+	module.instance = ptr
+	module.ptr = unsafe.Pointer(module.instance)
+	SystemModuleMap.Store(name, module)
+	return module
 }
 
 func NewModuleInitFuncCallBack(moduleName string, fn func() *PyObject) uintptr {

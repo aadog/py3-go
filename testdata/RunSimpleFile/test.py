@@ -1,0 +1,1 @@
+print("run simple file ok")

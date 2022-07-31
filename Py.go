@@ -1,19 +1,34 @@
 package py3
 
 import (
+	"fmt"
 	"github.com/aadog/py3-go/cpy3"
 	"sync"
 )
 
 var SystemModuleMap = sync.Map{}
+var GoModule *PyModule
 
+func InitGoModuleName(name string, doc string) {
+	PyImport_AppendInittab(name, func() *PyObject {
+		GoModule = CreateModule(name, doc)
+		cls := CreateClass("MyClass", "")
+		cls.AddFunction("z", func(self *PyObject) {
+			fmt.Println("z")
+		})
+		GoModule.AddClass(cls)
+
+		return GoModule.AsObj()
+	})
+}
 func Initialize() {
+	//init python3
 	cpy3.Py_Initialize()
-	_UserException=PyErr_NewException("gofunction.error",PyNil,PyNil)
+
+	//new userexception
+	_UserException = PyErr_NewException("gofunction.error", PyNil, PyNil)
 }
-func AddModuleToSystemMap(m *PyModule) {
-	SystemModuleMap.Store(m.GetName(), m)
-}
+
 func IsInitialized() int {
 	return cpy3.Py_IsInitialized()
 }
@@ -34,4 +49,10 @@ func FinalizeEx() int {
 		return true
 	})
 	return cpy3.Py_FinalizeEx()
+}
+func SetProgramName(name string) {
+	cpy3.Py_SetProgramName(name)
+}
+func SetPythonHome(home string) {
+	cpy3.Py_SetPythonHome(home)
 }
