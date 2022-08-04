@@ -1,7 +1,7 @@
 
 ### go python3 bind
 * ```python version:3.10.5```
-
+* ```python version:3.8.10 (default supper win7)```
 
 ### support list
 - `cogo-less,It does not need CGO support, so the compilation speed is very fast`

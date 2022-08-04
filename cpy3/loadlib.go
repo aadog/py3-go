@@ -34,7 +34,7 @@ func loadUILib() *dylib.LazyDLL {
 }
 
 func getDLLName() string {
-	libName := "python310"
+	libName := "python38"
 	if ext, ok := platformExtNames[runtime.GOOS]; ok {
 		return libName + ext
 	}
