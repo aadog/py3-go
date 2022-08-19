@@ -76,8 +76,6 @@ func PyModuleFromObj(obj *PyObject) *PyModule {
 	return dl
 }
 
-var pyModuleMethodCallDefs = make([]cpy3.PyMethodDef, 0)
-
 func PyTypeToGoType(p *PyObject) any {
 
 	return 0
@@ -139,7 +137,8 @@ var PyModuleMethodForwardCallBack = syscall.NewCallback(func(self uintptr, args 
 	return PyMethodForward(pyModule, newArgs, ifn).Instance()
 })
 
-func init() {
+func CreateModule(name string, doc string) *PyModule {
+	var pyModuleMethodCallDefs = make([]cpy3.PyMethodDef, 0)
 	methodCallDef := cpy3.PyMethodDef{
 		Ml_name:  cpy3.GoStrToCStr("Call"),
 		Ml_meth:  PyModuleMethodForwardCallBack,
@@ -154,9 +153,7 @@ func init() {
 		Ml_doc:   0,
 	}
 	pyModuleMethodCallDefs = append(pyModuleMethodCallDefs, moduleNullMethodDef)
-}
 
-func CreateModule(name string, doc string) *PyModule {
 	module := &PyModule{}
 	module.GoObj = new(PyModuleGoObj)
 	module.GoObj.moduleDef = &cpy3.PyModuleDef{
