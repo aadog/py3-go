@@ -34,20 +34,22 @@ func IsInitialized() int {
 }
 func Finalize() {
 	SystemModuleMap.Range(func(key, value any) bool {
-		SystemModuleMap.Delete(key)
+		//SystemModuleMap.Delete(key)
 		m := value.(*PyModule)
 		m.DecRef()
 		return true
 	})
+	_UserException.DecRef()
 	cpy3.Py_Finalize()
 }
 func FinalizeEx() int {
 	SystemModuleMap.Range(func(key, value any) bool {
-		SystemModuleMap.Delete(key)
+		//SystemModuleMap.Delete(key)
 		m := value.(*PyModule)
 		m.DecRef()
 		return true
 	})
+	_UserException.DecRef()
 	return cpy3.Py_FinalizeEx()
 }
 func SetProgramName(name string) {

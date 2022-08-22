@@ -1,20 +1,22 @@
 package cpy3
 
+import "github.com/aadog/msvcrt-go"
+
 func PyObject_GetAttrString(obj uintptr, attr_name string) uintptr {
-	r, _, _ := pyObject_GetAttrString.Call(obj, GoStrToCStr(attr_name))
+	r, _, _ := pyObject_GetAttrString.Call(obj, msvcrt.StringToCUTF8String(attr_name))
 	return r
 }
 func PyObject_HasAttrString(obj uintptr, attr_name string) int {
-	r, _, _ := pyObject_HasAttrString.Call(obj, GoStrToCStr(attr_name))
+	r, _, _ := pyObject_HasAttrString.Call(obj, msvcrt.StringToCUTF8String(attr_name))
 	return int(r)
 }
 func PyObject_SetAttrString(obj uintptr, attr_name string, v uintptr) int {
-	r, _, _ := pyObject_SetAttrString.Call(obj, GoStrToCStr(attr_name), v)
+	r, _, _ := pyObject_SetAttrString.Call(obj, msvcrt.StringToCUTF8String(attr_name), v)
 	return int(r)
 }
 
 func PyObject_DelAttrString(obj uintptr, attr_name string) int {
-	r, _, _ := pyObject_DelAttrString.Call(obj, GoStrToCStr(attr_name))
+	r, _, _ := pyObject_DelAttrString.Call(obj, msvcrt.StringToCUTF8String(attr_name))
 	return int(r)
 }
 

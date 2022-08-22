@@ -1,12 +1,14 @@
 package cpy3
 
+import "github.com/aadog/msvcrt-go"
+
 func PyDict_SetItem(obj uintptr, key uintptr, val uintptr) int {
 	r, _, _ := pyDict_SetItem.Call(obj, key, val)
 	return int(r)
 }
 
 func PyDict_SetItemString(obj uintptr, key string, val uintptr) int {
-	r, _, _ := pyDict_SetItemString.Call(obj, GoStrToCStr(key), val)
+	r, _, _ := pyDict_SetItemString.Call(obj, msvcrt.StringToCUTF8String(key), val)
 	return int(r)
 }
 
@@ -32,7 +34,7 @@ func PyDict_Keys(obj uintptr) uintptr {
 	return r
 }
 func PyDict_GetItemString(obj uintptr, key string) uintptr {
-	r, _, _ := pyDict_GetItemString.Call(obj, GoStrToCStr(key))
+	r, _, _ := pyDict_GetItemString.Call(obj, msvcrt.StringToCUTF8String(key))
 	return r
 }
 
@@ -41,6 +43,6 @@ func PyDict_DelItem(obj uintptr, key uintptr) int {
 	return int(r)
 }
 func PyDict_DelItemString(obj uintptr, key string) int {
-	r, _, _ := pyDict_DelItemString.Call(obj, GoStrToCStr(key))
+	r, _, _ := pyDict_DelItemString.Call(obj, msvcrt.StringToCUTF8String(key))
 	return int(r)
 }

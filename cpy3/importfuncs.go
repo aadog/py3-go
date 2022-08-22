@@ -110,9 +110,9 @@ var (
 
 	pyBool_FromLong = libpython3.NewProc("PyBool_FromLong")
 
-	pyExc_Exception  = libpython3.NewProc("PyExc_Exception")
-	pyExc_ValueError = libpython3.NewProc("PyExc_ValueError")
-	pyErr_SetString  = libpython3.NewProc("PyErr_SetString")
+	pyExc_Exception    = libpython3.NewProc("PyExc_Exception")
+	pyExc_ValueError   = libpython3.NewProc("PyExc_ValueError")
+	pyErr_SetString    = libpython3.NewProc("PyErr_SetString")
 	pyErr_NewException = libpython3.NewProc("PyErr_NewException")
 
 	pyInstanceMethod_New = libpython3.NewProc("PyInstanceMethod_New")
@@ -124,9 +124,4 @@ var kernel32dll = syscall.NewLazyDLL("kernel32.dll")
 var (
 	_lstrlenW = kernel32dll.NewProc("lstrlenW")
 	_lstrlen  = kernel32dll.NewProc("lstrlenA")
-)
-
-var msvcrtdll = syscall.NewLazyDLL("msvcrt.dll")
-var (
-	_memcpy = msvcrtdll.NewProc("memcpy")
 )

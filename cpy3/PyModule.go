@@ -1,6 +1,9 @@
 package cpy3
 
-import "unsafe"
+import (
+	"github.com/aadog/msvcrt-go"
+	"unsafe"
+)
 
 type PyMethodDef struct {
 	Ml_name  uintptr
@@ -55,7 +58,7 @@ func PyImport_Import(name uintptr) uintptr {
 
 func PyModule_GetName(obj uintptr) string {
 	r, _, _ := pyModule_GetName.Call(obj)
-	return CStrToGoStr(r)
+	return msvcrt.CUtf8ToString(r)
 }
 func PyModule_GetDict(obj uintptr) uintptr {
 	r, _, _ := pyModule_GetDict.Call(obj)
@@ -66,18 +69,18 @@ func PyModule_AddFunctions(obj uintptr, functionsDef uintptr) int {
 	return int(r)
 }
 func PyModule_AddIntConstant(obj uintptr, name string, value int64) int {
-	r, _, _ := pyModule_AddIntConstant.Call(obj, GoStrToCStr(name), uintptr(value))
+	r, _, _ := pyModule_AddIntConstant.Call(obj, msvcrt.StringToCUTF8String(name), uintptr(value))
 	return int(r)
 }
 func PyModule_AddStringConstant(obj uintptr, name string, value string) int {
-	r, _, _ := pyModule_AddStringConstant.Call(obj, GoStrToCStr(name), GoStrToCStr(value))
+	r, _, _ := pyModule_AddStringConstant.Call(obj, msvcrt.StringToCUTF8String(name), msvcrt.StringToCUTF8String(value))
 	return int(r)
 }
 func PyModule_AddObject(obj uintptr, name string, value uintptr) int {
-	r, _, _ := pyModule_AddObject.Call(obj, GoStrToCStr(name), value)
+	r, _, _ := pyModule_AddObject.Call(obj, msvcrt.StringToCUTF8String(name), value)
 	return int(r)
 }
 func PyModule_AddObjectRef(obj uintptr, name string, value uintptr) int {
-	r, _, _ := pyModule_AddObjectRef.Call(obj, GoStrToCStr(name), value)
+	r, _, _ := pyModule_AddObjectRef.Call(obj, msvcrt.StringToCUTF8String(name), value)
 	return int(r)
 }

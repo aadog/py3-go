@@ -1,9 +1,12 @@
 package cpy3
 
-import "unsafe"
+import (
+	"github.com/aadog/msvcrt-go"
+	"unsafe"
+)
 
 func PyUnicode_DecodeFSDefault(u string) uintptr {
-	r, _, _ := pyUnicode_DecodeFSDefault.Call(GoStrToCStr(u))
+	r, _, _ := pyUnicode_DecodeFSDefault.Call(msvcrt.StringToCUTF8String(u))
 	return r
 }
 func PyUnicode_FromString(u string) uintptr {
@@ -13,7 +16,7 @@ func PyUnicode_FromString(u string) uintptr {
 		r, _, _ := pyUnicode_FromString.Call(uintptr(unsafe.Pointer(&b[0])))
 		return r
 	}
-	r, _, _ := pyUnicode_FromString.Call(GoStrToCStr(u))
+	r, _, _ := pyUnicode_FromString.Call(msvcrt.StringToCUTF8String(u))
 	return r
 }
 func PyUnicode_GetLength(obj uintptr) int64 {
@@ -22,5 +25,5 @@ func PyUnicode_GetLength(obj uintptr) int64 {
 }
 func PyUnicode_AsUTF8(obj uintptr) string {
 	r, _, _ := pyUnicode_AsUTF8.Call(obj)
-	return CStrToGoStr(r)
+	return msvcrt.CUtf8ToString(r)
 }

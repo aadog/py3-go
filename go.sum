@@ -1,4 +1,10 @@
 github.com/aadog/dylib v0.0.0-20210726041103-cf42039dadef h1:mGZOvpO7j6BEfP6n0XZR26yJI5JIEOdDob0DIRWCWzg=
 github.com/aadog/dylib v0.0.0-20210726041103-cf42039dadef/go.mod h1:s1Bk9R0HPteP3SdlPl2hDCeBa62CMsn01myH+/HQJYE=
-github.com/aadog/py3-go v0.0.0-20220722183119-ab76c6fd49f7 h1:iJLY1onGTvCk/91bhwRGOrFi6j1EDk8ITCm6jdaMFFg=
-github.com/aadog/py3-go v0.0.0-20220722183119-ab76c6fd49f7/go.mod h1:7dr+BHmt134y9ap4HlSrU92rqWCrNvuAm0THs0hyhuU=
+github.com/aadog/msvcrt-go v0.0.0-20220822103949-2ae6bd0a8f9a h1:fe+ZByTCw0ZgY5FzOWPtLn+Xry2ih+T12NoVKwU/LlA=
+github.com/aadog/msvcrt-go v0.0.0-20220822103949-2ae6bd0a8f9a/go.mod h1:HETwKFf0VX/tk1KIN1TP1BsK/Gahr5QXUUmdEfsIU5c=
+github.com/aadog/msvcrt-go v0.0.0-20220822104543-d4bd3cfe3e94 h1:KMKVjIK+WFEhWCLzCMLDUh77VNXR6iYxFQmf+hz61Hw=
+github.com/aadog/msvcrt-go v0.0.0-20220822104543-d4bd3cfe3e94/go.mod h1:HETwKFf0VX/tk1KIN1TP1BsK/Gahr5QXUUmdEfsIU5c=
+github.com/aadog/msvcrt-go v0.0.0-20220822110527-b41ac413f051 h1:+kIClhSnX52cDq+i7YbQFrHTqsv4xbI/+D8V/3Ree0Q=
+github.com/aadog/msvcrt-go v0.0.0-20220822110527-b41ac413f051/go.mod h1:HETwKFf0VX/tk1KIN1TP1BsK/Gahr5QXUUmdEfsIU5c=
+github.com/aadog/msvcrt-go v0.0.0-20220822112016-492a0c95116a h1:Abw3+yfycf2dGT4JDUU88yHdk1BSgztnEnwh26ZL2Dk=
+github.com/aadog/msvcrt-go v0.0.0-20220822112016-492a0c95116a/go.mod h1:HETwKFf0VX/tk1KIN1TP1BsK/Gahr5QXUUmdEfsIU5c=

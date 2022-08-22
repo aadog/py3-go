@@ -2,6 +2,7 @@ package py3
 
 import (
 	"fmt"
+	"github.com/aadog/msvcrt-go"
 	"github.com/aadog/py3-go/cpy3"
 	"reflect"
 	"sync"
@@ -17,8 +18,9 @@ const (
 var pyModuleInitMap = sync.Map{}
 
 type PyModuleGoObj struct {
-	moduleDef *cpy3.PyModuleDef
-	CallMap   sync.Map
+	moduleDef  *cpy3.PyModuleDef
+	methodsDef []cpy3.PyMethodDef
+	CallMap    sync.Map
 }
 type PyModule struct {
 	PyObject
@@ -80,7 +82,9 @@ func PyTypeToGoType(p *PyObject) any {
 
 	return 0
 }
+
 func PyMethodForward(self *PyModule, args *PyTuple, method interface{}) *PyObject {
+
 	methodType := reflect.TypeOf(method)
 	methodValue := reflect.ValueOf(method)
 	if methodType.Kind() != reflect.Func {
@@ -138,12 +142,12 @@ var PyModuleMethodForwardCallBack = syscall.NewCallback(func(self uintptr, args 
 })
 
 func CreateModule(name string, doc string) *PyModule {
-	var pyModuleMethodCallDefs = make([]cpy3.PyMethodDef, 0)
+	pyModuleMethodCallDefs := make([]cpy3.PyMethodDef, 0)
 	methodCallDef := cpy3.PyMethodDef{
-		Ml_name:  cpy3.GoStrToCStr("Call"),
+		Ml_name:  msvcrt.MallocCString("Call"),
 		Ml_meth:  PyModuleMethodForwardCallBack,
 		Ml_flags: 1,
-		Ml_doc:   cpy3.GoStrToCStr("module call forward"),
+		Ml_doc:   msvcrt.MallocCString("module call forward"),
 	}
 	pyModuleMethodCallDefs = append(pyModuleMethodCallDefs, methodCallDef)
 	moduleNullMethodDef := cpy3.PyMethodDef{
@@ -156,12 +160,13 @@ func CreateModule(name string, doc string) *PyModule {
 
 	module := &PyModule{}
 	module.GoObj = new(PyModuleGoObj)
+	module.GoObj.methodsDef = pyModuleMethodCallDefs
 	module.GoObj.moduleDef = &cpy3.PyModuleDef{
 		M_base: cpy3.PyModuleDef_Base{
 			Ob_base: cpy3.PyObject_HEAD_INIT(0),
 		},
-		M_name:     cpy3.GoStrToCStr(name),
-		M_doc:      cpy3.GoStrToCStr(doc),
+		M_name:     msvcrt.MallocCString(name),
+		M_doc:      msvcrt.MallocCString(doc),
 		M_size:     -1,
 		M_methods:  uintptr(unsafe.Pointer(&pyModuleMethodCallDefs[0])),
 		M_slots:    0,

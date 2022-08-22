@@ -143,14 +143,14 @@ var PyClassInstanceMethodForwardCallBack = syscall.NewCallback(func(self uintptr
 	return Py_RETURN_NONE().instance
 })
 
-func init() {
-	PyClassInstanceMethodCallDef = &cpy3.PyMethodDef{
-		Ml_name:  cpy3.GoStrToCStr("Call"),
-		Ml_meth:  PyClassInstanceMethodForwardCallBack,
-		Ml_flags: 3,
-		Ml_doc:   cpy3.GoStrToCStr("class call forward"),
-	}
-}
+//func init() {
+//	PyClassInstanceMethodCallDef = &cpy3.PyMethodDef{
+//		Ml_name:  cpy3.GoStrToCStr("Call"),
+//		Ml_meth:  PyClassInstanceMethodForwardCallBack,
+//		Ml_flags: 3,
+//		Ml_doc:   cpy3.GoStrToCStr("class call forward"),
+//	}
+//}
 
 //func CreateClass(name string, dict map[string]any) *PyClass {
 //	if dict == nil {

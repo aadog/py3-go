@@ -1,8 +1,10 @@
 package cpy3
 
+import "github.com/aadog/msvcrt-go"
+
 func PyType_Name(obj uintptr) string {
 	r, _, _ := pyType_Name.Call(obj)
-	return CStrToGoStr(r)
+	return msvcrt.CUtf8ToString(r)
 }
 
 func PyType_GetModule(obj uintptr) uintptr {

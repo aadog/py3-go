@@ -1,8 +1,9 @@
 package cpy3
 
+import "github.com/aadog/msvcrt-go"
 
-func PyErr_NewException(name string,base uintptr,dict uintptr) uintptr {
-	r,_,_:=pyErr_NewException.Call(GoStrToCStr(name),base,dict)
+func PyErr_NewException(name string, base uintptr, dict uintptr) uintptr {
+	r, _, _ := pyErr_NewException.Call(msvcrt.StringToCUTF8String(name), base, dict)
 	return r
 }
 func PyExc_Exception() uintptr {
@@ -14,5 +15,5 @@ func PyExc_ValueError() uintptr {
 }
 
 func PyErr_SetString(tp uintptr, message string) {
-	pyErr_SetString.Call(tp, GoStrToCStr(message))
+	pyErr_SetString.Call(tp, msvcrt.StringToCUTF8String(message))
 }
